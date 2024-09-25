@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список студентов</title>
+</head>
+<body>
+<h1>Список студентов</h1>
+<form action="/students/add" method="post">
+    <input type="text" name="name" placeholder="Имя" required>
+    <input type="text" name="secondName" placeholder="Фамилия" required>
+    <input type="text" name="patronymic" placeholder="Отчество">
+    <input type="text" name="corpEmail" placeholder="Корп. почта">
+    <button type="submit" formmethod="post">Добавить студента</button>
+</form>
+
+<h2>Все студенты: </h2>
+<ul>
+    <th:block th:each="student : ${students}">
+        <li>
+            <span th:text="${student.name} + ' ' + ${student.secondName} + ' ' + ${student.patronymic} + ' ' + ${student.corpEmail}"></span>
+            <form action="/students/update" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${student.id}">
+                <input type="text" name="name" th:value="${student.name}" placeholder="Имя" required>
+                <input type="text" name="secondName" th:value="${student.secondName}" placeholder="Фамилия" required>
+                <input type="text" name="patronymic" th:value="${student.patronymic}" placeholder="Отчество">
+                <input type="text" name="corpEmail" th:value="${student.corpEmail}" placeholder="Корп. почта">
+                <button type="submit" formmethod="post">Обновить</button>
+            </form>
+            <form action="/students/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${student.id}">
+                <button type="submit" formmethod="post">Удалить</button>
+            </form>
+        </li>
+    </th:block>
+</ul>
+</body>
+</html>

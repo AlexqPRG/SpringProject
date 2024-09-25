@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Товары</title>
+</head>
+<body>
+<h1>Список товаров</h1>
+<form action="/items/add" method="post">
+    <input type="text" name="name" placeholder="Наименование" required>
+    <input type="text" name="description" placeholder="Описание" required>
+    <input type="number" name="price" placeholder="Цена" step="0.01" required>
+    <button type="submit" formmethod="post">Добавить товар</button>
+</form>
+
+<h2>Все товары: </h2>
+<ul>
+    <th:block th:each="item : ${items}">
+        <li>
+            <span th:text="${item.name} + ' ' + ${item.description} + ' ' + ${item.price}"></span>
+            <form action="/items/update" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${item.id}">
+                <input type="text" name="name" th:value="${item.name}" placeholder="Наименование" required>
+                <input type="text" name="description" th:value="${item.description}" placeholder="Описание" required>
+                <input type="number" name="price" th:value="${item.price}" placeholder="Цена" step="0.01" required>
+                <button type="submit" formmethod="post">Обновить товар</button>
+            </form>
+            <form action="/items/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${item.id}">
+                <button type="submit" formmethod="post">Удалить товар</button>
+            </form>
+        </li>
+    </th:block>
+</ul>
+</body>
+</html>
