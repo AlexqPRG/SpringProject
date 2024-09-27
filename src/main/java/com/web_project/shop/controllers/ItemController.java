@@ -29,7 +29,7 @@ public class ItemController {
     public String addItem(@RequestParam String name,
                           @RequestParam String description,
                           @RequestParam double price){
-        ItemModel itemModel = new ItemModel(0,name,description,price);
+        ItemModel itemModel = new ItemModel(0,name,description,price, false);
         itemService.addItem(itemModel);
         return "redirect:/items/all";
     }
@@ -39,7 +39,7 @@ public class ItemController {
                              @RequestParam String name,
                              @RequestParam String description,
                              @RequestParam double price){
-        ItemModel updateModel = new ItemModel(id, name,description,price);
+        ItemModel updateModel = new ItemModel(id, name,description,price, false);
         itemService.updateItem(updateModel);
         return "redirect:/items/all";
     }

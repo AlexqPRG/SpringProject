@@ -5,6 +5,7 @@ import com.web_project.shop.model.StudentModel;
 import java.util.List;
 
 public interface StudentService {
+
     public List<StudentModel> findAllStudents();
 
     public StudentModel findStudentById(int id);

@@ -6,6 +6,8 @@ public class ItemModel {
     private String description;
     private double price;
 
+    private boolean isDel;
+
     public int getId() {
         return id;
     }
@@ -38,10 +40,19 @@ public class ItemModel {
         this.price = price;
     }
 
-    public ItemModel(int id, String name, String description, double price) {
+    public boolean isDel() {
+        return isDel;
+    }
+
+    public void setDel(boolean del) {
+        isDel = del;
+    }
+
+    public ItemModel(int id, String name, String description, double price, boolean isDel) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.isDel = isDel;
     }
 }

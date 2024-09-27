@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск клиентов</title>
+</head>
+<body>
+<th:block th:each="client : ${clients}">
+  <p th:text="'Логин:' + ${client.login}"/>
+  <p th:text="'Пароль:' + ${client.password}"/>
+  <p th:text="'Имя:' + ${client.name}"/>
+  <p th:text="'Фамилия:' + ${client.secondName}"/>
+  <p th:text="'Отчество:' + ${client.patronymic}"/>
+  <p th:text="'Почта:' + ${client.email}"/>
+  <p th:text="'Номер:' + ${client.number}"/>
+  <p th:text="'Пол:' + ${client.gender}"/>
+  <p th:text="'Дата создания:' + ${client.dateCreate}"/>
+  <br>
+<!--  <span th:text="${client.login} + ' ' + ${client.password} + ' ' + ${client.name} + ' ' + ${client.secondName} + ' ' + ${client.patronymic} + ' ' + ${client.email} + ' ' + ${client.number} + ' ' + ${client.gender}"></span><br>-->
+</th:block>
+
+</body>
+</html>
