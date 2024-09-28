@@ -7,12 +7,12 @@ import java.util.List;
 public interface ItemService {
     public List<ItemModel> findAllItems();
 
-    public ItemModel findItemById(int id);
+    public ItemModel findItemById(Long id);
 
     public ItemModel addItem(ItemModel item);
 
     public ItemModel updateItem(ItemModel itemModel);
 
-    public void deleteItem(int id);
+    public void deleteItem(Long id);
 
 }

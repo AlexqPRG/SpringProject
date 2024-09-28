@@ -2,40 +2,48 @@ package com.web_project.shop.service;
 
 import com.web_project.shop.model.ItemModel;
 import com.web_project.shop.repository.InMemoryItemRepository;
+import com.web_project.shop.repository.ItemRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class InMemoryItemServiceImpl implements ItemService{
-    private final InMemoryItemRepository inMemoryItemRepository;
+    private final ItemRepository itemRepository;
 
-    public InMemoryItemServiceImpl(InMemoryItemRepository inMemoryItemRepository) {
-        this.inMemoryItemRepository = inMemoryItemRepository;
+    public InMemoryItemServiceImpl(ItemRepository ItemRepository) {
+        this.itemRepository = ItemRepository;
     }
 
     @Override
     public List<ItemModel> findAllItems() {
-        return inMemoryItemRepository.findAllItems();
+        return itemRepository.findAll(Sort.by("id"));
     }
 
     @Override
-    public ItemModel findItemById(int id) {
-        return inMemoryItemRepository.findItemById(id);
+    public ItemModel findItemById(Long id) {
+        return itemRepository.findById(id).orElse(null);
     }
 
     @Override
     public ItemModel addItem(ItemModel item) {
-        return inMemoryItemRepository.addItem(item);
+        return itemRepository.save(item);
     }
 
     @Override
     public ItemModel updateItem(ItemModel itemModel) {
-        return inMemoryItemRepository.updateItem(itemModel);
+        if(itemRepository.existsById(itemModel.getId())){
+            return itemRepository.save(itemModel);
+        }
+        return null;
     }
 
     @Override
-    public void deleteItem(int id) {
-        inMemoryItemRepository.deleteItem(id);
+    public void deleteItem(Long id) {
+        if(itemRepository.existsById(id)){
+            itemRepository.deleteById(id);
+        }
     }
+
 }

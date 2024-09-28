@@ -6,10 +6,13 @@
 </head>
 <body>
 <h1>Список товаров</h1>
-<form action="/items/add" method="post">
-    <input type="text" name="name" placeholder="Наименование" required>
-    <input type="text" name="description" placeholder="Описание" required>
-    <input type="number" name="price" placeholder="Цена" step="0.01" required>
+<form action="/items/add" method="post" th:object="${item}">
+    <input type="text" name="name" placeholder="Наименование" th:field="*{name}" required>
+    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Имя не должно быть меньше чем 3 символа</div>
+    <input type="text" name="description" placeholder="Описание" th:field="*{description}" required>
+    <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Описание должно быть не больше 255 символов</div>
+    <input type="number" name="price" placeholder="Цена" step="0.01" th:field="*{price}" required>
+    <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Цена должна быть не больше 99999.99</div>
     <button type="submit" formmethod="post">Добавить товар</button>
 </form>
 
