@@ -18,6 +18,7 @@ public class StudentModel {
     @Size(min = 3, message = "Фамилия не менее 3 символов")
     private String SecondName;
     @Nullable
+    @Size(max = 25, message = "Отчество не более 25 символов")
     private String Patronymic;
     @Nullable
     @Email(message = "Емейл не корректен")
@@ -58,11 +59,11 @@ public class StudentModel {
     }
 
     @Nullable
-    public String getPatronymic() {
+    public @Size(max = 25, message = "Отчество не более 25 символов") String getPatronymic() {
         return Patronymic;
     }
 
-    public void setPatronymic(@Nullable String patronymic) {
+    public void setPatronymic(@Nullable @Size(max = 25, message = "Отчество не более 25 символов") String patronymic) {
         Patronymic = patronymic;
     }
 

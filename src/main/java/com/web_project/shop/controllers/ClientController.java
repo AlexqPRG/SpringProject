@@ -1,12 +1,13 @@
 package com.web_project.shop.controllers;
 
 import com.web_project.shop.model.ClientModel;
-import com.web_project.shop.repository.InMemoryClientRepository;
 import com.web_project.shop.service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -27,55 +28,46 @@ public class ClientController {
         model.addAttribute("clients", clientService.paginClients(page, size));
         model.addAttribute("page", page);
         model.addAttribute("count", clientService.getSizePaginClients());
+        model.addAttribute("client", new ClientModel());
         return "clientsList";
     }
 
     @GetMapping("/all/{id}")
-    public String findClientById(@PathVariable("id") int id, Model model) {
+    public String findClientById(@PathVariable("id") Long id, Model model) {
         model.addAttribute("clients", clientService.findClientById(id));
         model.addAttribute("page", 0);
         model.addAttribute("count", 0);
+        model.addAttribute("client", new ClientModel());
         return "clientsList";
     }
 
     @PostMapping("/add")
-    public String createClient(@RequestParam String login,
-                               @RequestParam String password,
-                               @RequestParam String name,
-                               @RequestParam String secondName,
-                               @RequestParam String patronymic,
-                               @RequestParam String email,
-                               @RequestParam String number,
-                               @RequestParam String gender) {
+    public String createClient(@Valid @ModelAttribute("client") ClientModel clientModel, BindingResult result, Model model) {
 
         LocalDate currentDate = LocalDate.now();
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        clientModel.setDateCreate(currentDate.format(formatter));
 
-        ClientModel createModel = new ClientModel(0, login, password, name, secondName, patronymic, email, number, gender, currentDate.format(formatter), false);
-        clientService.addClient(createModel);
 
+
+        if(result.hasErrors()){
+            model.addAttribute("clients", clientService.paginClients(0, 0));
+            model.addAttribute("page", 0);
+            model.addAttribute("count", clientService.getSizePaginClients());
+            return "clientsList";
+        }
+        clientService.addClient(clientModel);
         return "redirect:/clients/all";
     }
 
     @PostMapping("/update")
-    public String updateCreate(@RequestParam int id,
-                               @RequestParam String login,
-                               @RequestParam String password,
-                               @RequestParam String name,
-                               @RequestParam String secondName,
-                               @RequestParam String patronymic,
-                               @RequestParam String email,
-                               @RequestParam String number,
-                               @RequestParam String gender,
-                               @RequestParam String dateCreate) {
-        ClientModel updateModel = new ClientModel(id, login, password, name,secondName, patronymic, email, number, gender, dateCreate, false);
-        clientService.updateClient(updateModel);
+    public String updateCreate(@Valid @ModelAttribute("client") ClientModel clientModel, BindingResult result) {
+        clientService.updateClient(clientModel);
         return "redirect:/clients/all";
     }
 
     @PostMapping("/delete")
-    public String deleteClient(@RequestParam int id){
+    public String deleteClient(@RequestParam Long id){
         clientService.deleteClient(id);
         return "redirect:/clients/all";
     }
@@ -96,14 +88,14 @@ public class ClientController {
    }
 
    @PostMapping("/softdelete")
-   public String softDeleteClient(@RequestParam int id) {
+   public String softDeleteClient(@RequestParam Long id) {
        clientService.softDeleteClient(id);
        return "redirect:/clients/all";
    }
 
 
    @PostMapping("/deleteCheckBox")
-    public String allDeleteClients(@RequestParam List<Integer> clientIds){
+    public String allDeleteClients(@RequestParam List<Long> clientIds){
         for(var i : clientIds){
             clientService.softDeleteClient(i);
             System.out.println(i);

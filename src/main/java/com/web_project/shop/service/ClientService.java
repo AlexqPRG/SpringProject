@@ -8,19 +8,19 @@ public interface ClientService {
 
     public List<ClientModel> findAllClients();
 
-    public ClientModel findClientById(int id);
+    public ClientModel findClientById(Long id);
 
     public ClientModel addClient(ClientModel clientModel);
 
     public ClientModel updateClient(ClientModel clientModel);
 
-    public void deleteClient(int id);
+    public void deleteClient(Long id);
 
     public List<ClientModel> findClientsByName(String param, String name);
 
     public List<ClientModel> filterClients (String when, String time, String gender);
 
-    public void softDeleteClient(int id);
+    public void softDeleteClient(Long id);
 
     public List<ClientModel> paginClients(int page, int size);
 

@@ -1,6 +1,7 @@
 package com.web_project.shop.controllers;
 
 import com.web_project.shop.model.StudentModel;
+import com.web_project.shop.repository.StudentRepository;
 import com.web_project.shop.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
     @Autowired
     public StudentService studentService;
+
 
     @GetMapping("/all")
     public String getAllStudents(Model model) {

@@ -1,7 +1,6 @@
 package com.web_project.shop.service;
 
 import com.web_project.shop.model.ItemModel;
-import com.web_project.shop.repository.InMemoryItemRepository;
 import com.web_project.shop.repository.ItemRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,11 @@ public class InMemoryItemServiceImpl implements ItemService{
         this.itemRepository = ItemRepository;
     }
 
+
     @Override
     public List<ItemModel> findAllItems() {
         return itemRepository.findAll(Sort.by("id"));
+//        return findAll(itemRepository);
     }
 
     @Override
@@ -45,5 +46,4 @@ public class InMemoryItemServiceImpl implements ItemService{
             itemRepository.deleteById(id);
         }
     }
-
 }

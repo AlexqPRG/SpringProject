@@ -1,113 +1,50 @@
 package com.web_project.shop.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 
-public class ClientModel {
-    private int id;
+import java.time.LocalDate;
+import java.util.Date;
+
+@Entity
+public class ClientModel  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25")
     private String login;
+    @Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25")
     private String password;
 
+    @Size(min = 5, message = "Имя не менее 5 символов")
     private String name;
+    @Size(min = 1, max = 20, message = "Фамилия не более 20 и не менее 1")
     private String secondName;
+    @Size(min = 1, max = 20, message = "Отчество не более 20 и не менее 1")
     private String patronymic;
 
+    @Email(message = "Некорректный емейл")
     private String email;
+
+    @Pattern(regexp = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$", message = "Неверный формат телефона")
     private String number;
+
+    @NotNull(message = "Значение не может быть null")
     private String gender;
 
+    @NotNull
     private String dateCreate;
 
+    @NotNull(message = "Значение не может быть null")
     private boolean isDel;
 
-    public int getId() {
-        return id;
+    public ClientModel() {
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(String dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public boolean getDel() {
-        return isDel;
-    }
-
-    public void setDel(boolean del) {
-        isDel = del;
-    }
-
-    public ClientModel(int id, String login, String password, String name, String secondName, String patronymic, String email, String number, String gender, String dateCreate, boolean isDel) {
+    public ClientModel(Long id, String login, String password, String name, String secondName, String patronymic, String email, String number, String gender, String dateCreate, boolean isDel) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -119,5 +56,94 @@ public class ClientModel {
         this.gender = gender;
         this.dateCreate = dateCreate;
         this.isDel = isDel;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public @Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25") String getLogin() {
+        return login;
+    }
+
+    public void setLogin(@Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25") String login) {
+        this.login = login;
+    }
+
+    public @Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25") String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25") String password) {
+        this.password = password;
+    }
+
+    public @Size(min = 5, message = "Имя не менее 5 символов") String getName() {
+        return name;
+    }
+
+    public void setName(@Size(min = 5, message = "Имя не менее 5 символов") String name) {
+        this.name = name;
+    }
+
+    public @Size(min = 1, max = 20, message = "Фамилия не более 20 и не менее 1") String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(@Size(min = 1, max = 20, message = "Фамилия не более 20 и не менее 1") String secondName) {
+        this.secondName = secondName;
+    }
+
+    public @Size(min = 1, max = 20, message = "Отчество не более 20 и не менее 1") String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(@Size(min = 1, max = 20, message = "Отчество не более 20 и не менее 1") String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public @Email(message = "Некорректный емейл") String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@Email(message = "Некорректный емейл") String email) {
+        this.email = email;
+    }
+
+    public @Pattern(regexp = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$", message = "Неверный формат телефона") String getNumber() {
+        return number;
+    }
+
+    public void setNumber(@Pattern(regexp = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$", message = "Неверный формат телефона") String number) {
+        this.number = number;
+    }
+
+    public @NotNull(message = "Значение не может быть null") String getGender() {
+        return gender;
+    }
+
+    public void setGender(@NotNull(message = "Значение не может быть null") String gender) {
+        this.gender = gender;
+    }
+
+    public @NotNull String getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(@NotNull String dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+    @NotNull(message = "Значение не может быть null")
+    public boolean isDel() {
+        return isDel;
+    }
+
+    public void setDel(@NotNull(message = "Значение не может быть null") boolean del) {
+        isDel = del;
     }
 }
