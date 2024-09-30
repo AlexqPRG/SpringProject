@@ -26,7 +26,7 @@ public class ItemController {
 
     @GetMapping("/all")
     public String getAllItems(Model model){
-        model.addAttribute("items", itemService.findAllItems());
+        model.addAttribute("items", itemServiceTEst.findAll());
         model.addAttribute("item", new ItemModel());
         return "itemList";
     }
@@ -43,7 +43,7 @@ public class ItemController {
 
     @GetMapping("/all/{id}")
     public String getItemById(@PathVariable("id") Long id, Model model){
-        model.addAttribute("items", itemService.findItemById(id));
+        model.addAttribute("items", itemServiceTEst.findById(id));
         model.addAttribute("item", new ItemModel());
         return "itemList";
     }
@@ -51,7 +51,7 @@ public class ItemController {
     @PostMapping("/add")
     public String addItem(@Valid @ModelAttribute("item") ItemModel itemModel, BindingResult result, Model model){
         if(result.hasErrors()){
-            model.addAttribute("items", itemService.findAllItems());
+            model.addAttribute("items", itemServiceTEst.findAll());
             return "itemList";
         }
         itemServiceTEst.createNote(itemModel);
@@ -60,13 +60,13 @@ public class ItemController {
 
     @PostMapping("/update")
     public String updateItem(@Valid @ModelAttribute("item") ItemModel itemModel, BindingResult result){
-        itemService.updateItem(itemModel);
+        itemServiceTEst.updateNote(itemModel, itemModel.getId());
         return "redirect:/items/all";
     }
 
     @PostMapping("/delete")
     public String deleteItem(@RequestParam Long id){
-        itemService.deleteItem(id);
+        itemServiceTEst.deleteNote(id);
         return "redirect:/items/all";
     }
 

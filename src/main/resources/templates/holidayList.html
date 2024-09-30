@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список мероприятий</title>
+</head>
+<body>
+<h1>Список мероприятий</h1>
+<form action="/holidays/add" method="post" th:object="${holiday}">
+  <input type="text" name="name" placeholder="Название" th:field="*{name}" required>
+  <div>
+    <label for="students">Студенты-участники: </label>
+    <select id="students" multiple th:field="*{students}">
+      <option th:each="student : ${students}" th:value="${student.id}"
+              th:text="${student.name}"></option>
+    </select>
+  </div>
+  <button type="submit" formmethod="post">Добавить мероприятие</button>
+</form>
+<h2>Все мероприятия: </h2>
+<ul>
+  <th:block th:each="holiday : ${holidays}">
+    <li>
+      <span th:text="${holiday.name}"></span>
+        <ul>
+          <li th:each="student : ${holiday.students}" th:text="${student.name}"></li>
+        </ul>
+    </li>
+  </th:block>
+</ul>
+</body>
+</html>

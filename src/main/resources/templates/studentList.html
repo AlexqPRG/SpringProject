@@ -14,6 +14,14 @@
     <input type="text" name="patronymic" placeholder="Отчество" th:field="*{patronymic}">
     <input type="text" name="corpEmail" placeholder="Корп. почта" th:field="*{corpEmail}">
     <div th:if="${#fields.hasErrors('corpEmail')}" th:errors="*{corpEmail}">Емейл должен быть корректно заполнен</div>
+    <div>
+        <label for="university">Университет: </label>
+        <select id="university" th:field="*{university}">
+            <option th:each="university : ${universities}" th:value="${university.id}" th:text="${university.name}"></option>
+        </select>
+    </div>
+    <input type="text" name="passport.series" placeholder="Серия паспорта" th:field="*{passport.series}" required>
+    <input type="text" name="passport.number" placeholder="Номер паспорта" th:field="*{passport.number}" required>
     <button type="submit" formmethod="post">Добавить студента</button>
 </form>
 
@@ -28,6 +36,8 @@
                 <input type="text" name="secondName" th:value="${student.secondName}" placeholder="Фамилия" required>
                 <input type="text" name="patronymic" th:value="${student.patronymic}" placeholder="Отчество">
                 <input type="text" name="corpEmail" th:value="${student.corpEmail}" placeholder="Корп. почта">
+                <input type="text" name="passport.series" th:value="${student.passport.series}" placeholder="Серия паспорта">
+                <input type="text" name="passport.number" th:value="${student.passport.number}" placeholder="Номер паспорта">
                 <button type="submit" formmethod="post">Обновить</button>
             </form>
             <form action="/students/delete" method="post" style="display:inline;">

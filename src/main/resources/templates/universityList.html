@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список университетов</title>
+</head>
+<body>
+<h1>Список университеттов</h1>
+<form action="/universities/add" method="post" th:object="${university}">
+  <input type="text" name="name" placeholder="Название" th:field="*{name}" required>
+  <button type="submit" formmethod="post">Добавить университет</button>
+</form>
+</body>
+</html>
