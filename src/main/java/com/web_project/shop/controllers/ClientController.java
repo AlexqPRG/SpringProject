@@ -1,7 +1,9 @@
 package com.web_project.shop.controllers;
 
+import com.web_project.shop.model.AddressModel;
 import com.web_project.shop.model.ClientModel;
-import com.web_project.shop.service.ClientService;
+import com.web_project.shop.service.InMemoryAddressService;
+import com.web_project.shop.service.InMemoryClientServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,13 +15,17 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/clients")
 public class ClientController {
 
     @Autowired
-    public ClientService clientService;
+    public InMemoryClientServiceImpl clientService;
+
+    @Autowired
+    public InMemoryAddressService addressService;
 
     @GetMapping("/all")
     public String findAllClients(@RequestParam(defaultValue = "0") int page,
@@ -32,9 +38,15 @@ public class ClientController {
         return "clientsList";
     }
 
+    @GetMapping("address")
+    public void fifnwf(){
+        AddressModel addressModel = new AddressModel();
+        addressService.createNote(addressModel);
+    }
+
     @GetMapping("/all/{id}")
-    public String findClientById(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("clients", clientService.findClientById(id));
+    public String findClientById(@PathVariable("id") UUID id, Model model) {
+        model.addAttribute("clients", clientService.findById(id));
         model.addAttribute("page", 0);
         model.addAttribute("count", 0);
         model.addAttribute("client", new ClientModel());
@@ -56,19 +68,19 @@ public class ClientController {
             model.addAttribute("count", clientService.getSizePaginClients());
             return "clientsList";
         }
-        clientService.addClient(clientModel);
+        clientService.createNote(clientModel);
         return "redirect:/clients/all";
     }
 
     @PostMapping("/update")
     public String updateCreate(@Valid @ModelAttribute("client") ClientModel clientModel, BindingResult result) {
-        clientService.updateClient(clientModel);
+        clientService.updateClient(clientModel, clientModel.getId());
         return "redirect:/clients/all";
     }
 
     @PostMapping("/delete")
-    public String deleteClient(@RequestParam Long id){
-        clientService.deleteClient(id);
+    public String deleteClient(@RequestParam UUID id){
+        clientService.deleteNote(id);
         return "redirect:/clients/all";
     }
 
@@ -88,14 +100,14 @@ public class ClientController {
    }
 
    @PostMapping("/softdelete")
-   public String softDeleteClient(@RequestParam Long id) {
+   public String softDeleteClient(@RequestParam UUID id) {
        clientService.softDeleteClient(id);
        return "redirect:/clients/all";
    }
 
 
    @PostMapping("/deleteCheckBox")
-    public String allDeleteClients(@RequestParam List<Long> clientIds){
+    public String allDeleteClients(@RequestParam List<UUID> clientIds){
         for(var i : clientIds){
             clientService.softDeleteClient(i);
             System.out.println(i);

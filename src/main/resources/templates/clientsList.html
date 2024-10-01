@@ -34,6 +34,9 @@
 
 <ul>
     <th:block th:each="client : ${clients}">
+        <th:block th:each="order : client.order">
+            <span th:text="${order.total_price}"/>
+        </th:block>
         <li>
             <span th:text="${client.login} + ' ' + ${client.password} + ' ' + ${client.name} + ' ' + ${client.secondName} + ' ' + ${client.patronymic} + ' ' + ${client.email} + ' ' + ${client.number} + ' ' + ${client.gender}"></span>
             <form action="/clients/update" method="post" style="display:inline;">

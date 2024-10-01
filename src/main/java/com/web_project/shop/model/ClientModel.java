@@ -1,19 +1,18 @@
 package com.web_project.shop.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class ClientModel  {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue()
+    private UUID id;
     @Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25")
     private String login;
     @Size(min = 8, max = 25, message = "Логин не менее 8 и не более 25")
@@ -41,10 +40,18 @@ public class ClientModel  {
     @NotNull(message = "Значение не может быть null")
     private boolean isDel;
 
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private AddressModel address;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<OrderModel> order;
+
+
     public ClientModel() {
     }
 
-    public ClientModel(Long id, String login, String password, String name, String secondName, String patronymic, String email, String number, String gender, String dateCreate, boolean isDel) {
+    public ClientModel(UUID id, String login, String password, String name, String secondName, String patronymic, String email, String number, String gender, String dateCreate, boolean isDel, AddressModel address, List<OrderModel> order) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -56,13 +63,15 @@ public class ClientModel  {
         this.gender = gender;
         this.dateCreate = dateCreate;
         this.isDel = isDel;
+        this.address = address;
+        this.order = order;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -145,5 +154,21 @@ public class ClientModel  {
 
     public void setDel(@NotNull(message = "Значение не может быть null") boolean del) {
         isDel = del;
+    }
+
+    public AddressModel getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressModel address) {
+        this.address = address;
+    }
+
+    public List<OrderModel> getOrder() {
+        return order;
+    }
+
+    public void setOrder(List<OrderModel> order) {
+        this.order = order;
     }
 }

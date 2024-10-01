@@ -1,16 +1,16 @@
 package com.web_project.shop.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class ItemModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue()
+    private UUID id;
 
     @Size(min = 3, message = "Имя не менее 3 символов")
     private String name;
@@ -22,22 +22,28 @@ public class ItemModel {
     @DecimalMax(value = "99999.99", message = "Максимальная цена не более 99999.99")
     private double price;
 
+    @ManyToMany
+    @JoinTable(name = "order_item",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
+    private List<OrderModel> orders;
+
     public ItemModel() {
 
     }
 
-    public ItemModel(Long id, String name, String description, double price) {
+    public ItemModel(UUID id, String name, String description, double price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -49,20 +55,21 @@ public class ItemModel {
         this.name = name;
     }
 
-    public @Size(min = 3) String getDescription() {
+    public @Size(min = 20, message = "Описание не менее 20 символов") String getDescription() {
         return description;
     }
 
-    public void setDescription(@Size(min = 3) String description) {
+    public void setDescription(@Size(min = 20, message = "Описание не менее 20 символов") String description) {
         this.description = description;
     }
 
-    @DecimalMax(value = "99999.99")
+    @DecimalMin(value = "99.99", message = "Минимальная цена не менее 99.99")
+    @DecimalMax(value = "99999.99", message = "Максимальная цена не более 99999.99")
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(@DecimalMax(value = "99999.99") double price) {
+    public void setPrice(@DecimalMin(value = "99.99", message = "Минимальная цена не менее 99.99") @DecimalMax(value = "99999.99", message = "Максимальная цена не более 99999.99") double price) {
         this.price = price;
     }
 }

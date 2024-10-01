@@ -1,10 +1,7 @@
 package com.web_project.shop.controllers;
 
 import com.web_project.shop.model.ItemModel;
-import com.web_project.shop.repository.ItemRepository;
-import com.web_project.shop.service.AbstractService;
-import com.web_project.shop.service.ItemService;
-import com.web_project.shop.service.ItemServiceTEst;
+import com.web_project.shop.service.InMemoryItemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,15 +10,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/items")
 public class ItemController {
     @Autowired
-    public ItemService itemService;
-
-    @Autowired
-    public ItemServiceTEst itemServiceTEst;
+    public InMemoryItemService itemServiceTEst;
 
 
     @GetMapping("/all")
@@ -42,7 +37,7 @@ public class ItemController {
 
 
     @GetMapping("/all/{id}")
-    public String getItemById(@PathVariable("id") Long id, Model model){
+    public String getItemById(@PathVariable("id") UUID id, Model model){
         model.addAttribute("items", itemServiceTEst.findById(id));
         model.addAttribute("item", new ItemModel());
         return "itemList";
@@ -65,7 +60,7 @@ public class ItemController {
     }
 
     @PostMapping("/delete")
-    public String deleteItem(@RequestParam Long id){
+    public String deleteItem(@RequestParam UUID id){
         itemServiceTEst.deleteNote(id);
         return "redirect:/items/all";
     }

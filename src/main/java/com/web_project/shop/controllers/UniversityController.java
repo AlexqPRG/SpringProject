@@ -1,9 +1,7 @@
 package com.web_project.shop.controllers;
 
-import com.web_project.shop.model.PassportModel;
 import com.web_project.shop.model.UniversityModel;
-import com.web_project.shop.service.UniversityService;
-import com.web_project.shop.service.UniversityService;
+import com.web_project.shop.service.InMemoryUniversityServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,12 +15,12 @@ import java.util.UUID;
 @RequestMapping("/universities")
 public class UniversityController {
     @Autowired
-    public UniversityService universityService;
+    public InMemoryUniversityServiceImpl universityService;
 
 
     @GetMapping("/all")
     public String getAllUniversities(Model model) {
-        model.addAttribute("universities", universityService.findAllUniversities());
+        model.addAttribute("universities", universityService.findAll());
         model.addAttribute("university", new UniversityModel());
         return "universityList";
     }
@@ -30,30 +28,30 @@ public class UniversityController {
     @PostMapping("/add")
     public String addUniversity(@Valid @ModelAttribute("university") UniversityModel university, BindingResult result, Model model) {
         if(result.hasErrors()){
-            model.addAttribute("universities", universityService.findAllUniversities());
+            model.addAttribute("universities", universityService.findAll());
             return "universityList";
         }
-        universityService.addUniversity(university);
+        universityService.createNote(university);
         return "redirect:/universities/all";
 
     }
 
     @PostMapping("/update")
     public String updateUniversity(@Valid @ModelAttribute("university") UniversityModel university, BindingResult result) {
-        universityService.updateUniversity(university);
+        universityService.updateNote(university, university.getId());
         return "redirect:/universities/all";
 
     }
 
     @PostMapping("/delete")
     public String deleteUniversity(@RequestParam UUID id){
-        universityService.deleteUniversity(id);
+        universityService.deleteNote(id);
         return "redirect:/universities/all";
     }
 
     @GetMapping("/all/{id}")
     public String getIdUniversity(@PathVariable("id") UUID id, Model model){
-        model.addAttribute("universities", universityService.findAllUniversities());
+        model.addAttribute("universities", universityService.findAll());
         model.addAttribute("university", new UniversityModel());
         return "universityList";
     }

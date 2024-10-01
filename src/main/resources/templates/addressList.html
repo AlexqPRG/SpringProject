@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список адресов</title>
+</head>
+<body>
+<h1>Список адресов:</h1>
+<form action="/address/add" method="post" th:object="${address}">
+    <input type="text" name="country" placeholder="Страна" th:field="*{country}" required>
+
+    <input type="text" name="city" placeholder="Город" th:field="*{city}" required>
+
+    <input type="text" name="street" placeholder="Улица" th:field="*{street}">
+    <input type="number" name="floor" placeholder="Этаж" th:field="*{floor}">
+
+    <input type="text" name="numberHouse" placeholder="Номер дома" th:field="*{numberHouse}" required>
+
+    <button type="submit" formmethod="post">Добавить адрес</button>
+</form>
+
+<h2>Все адреса: </h2>
+<ul>
+    <th:block th:each="adres : ${addresses}">
+        <li>
+            <span th:text="${adres.country} + ' ' + ${adres.city} + ' ' + ${adres.street} + ' ' + ${adres.floor} + ' ' + ${adres.numberHouse}"></span>
+            <form action="/address/update" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${adres.id}">
+                <input type="text" name="country" th:value="${adres.country}" placeholder="Страна" required>
+                <input type="text" name="city" th:value="${adres.city}" placeholder="Город" required>
+                <input type="text" name="street" th:value="${adres.street}" placeholder="Улица">
+                <input type="text" name="floor" th:value="${adres.floor}" placeholder="Этаж">
+                <input type="text" name="numberHouse" th:value="${adres.numberHouse}" placeholder="Номер дома">
+                <button type="submit" formmethod="post">Обновить</button>
+            </form>
+            <form action="/address/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${adres.id}">
+                <button type="submit" formmethod="post">Удалить</button>
+            </form>
+        </li>
+    </th:block>
+</ul>
+</body>
+</html>

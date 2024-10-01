@@ -10,40 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class InMemoryStudentServiceImpl implements StudentService {
+public class InMemoryStudentServiceImpl extends InMemoryAbstractService<StudentModel, UUID, StudentRepository> {
     private final StudentRepository studentRepository;
 
-    public InMemoryStudentServiceImpl(StudentRepository studentRepository) {
+    public InMemoryStudentServiceImpl(StudentRepository jpaRepository, StudentRepository studentRepository) {
+        super(jpaRepository);
         this.studentRepository = studentRepository;
-    }
-
-    @Override
-    public List<StudentModel> findAllStudents(){
-        return studentRepository.findAll(Sort.by("id"));
-    }
-
-    @Override
-    public StudentModel findStudentById(UUID id){
-        return studentRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public StudentModel addStudent(StudentModel student){
-        return studentRepository.save(student);
-    }
-
-    @Override
-    public StudentModel updateStudent(StudentModel student){
-        if(studentRepository.existsById(student.getId())){
-            return studentRepository.save(student);
-        }
-        return null;
-    }
-
-    @Override
-    public void deleteStudent(UUID id){
-        if(studentRepository.existsById(id)){
-            studentRepository.deleteById(id);
-        }
     }
 }

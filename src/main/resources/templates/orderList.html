@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Список заказов</title>
+</head>
+<body>
+<h1>Список заказов</h1>
+<form action="/orders/add" method="post" th:object="${order}">
+  <input type="date" name="date" placeholder="Дата" th:field="*{date}" required>
+  <input type="number" step="0.01" name="totalPrice" placeholder="Общая цена" th:field="*{totalPrice}" required>
+  <div>
+    <label for="items">Товары: </label>
+    <select id="items" multiple th:field="*{items}">
+      <option th:each="item : ${items}" th:value="${item.id}"
+              th:text="${item.name}"></option>
+    </select>
+  </div>
+  <button type="submit" formmethod="post">Добавить заказ</button>
+</form>
+<h2>Все заказы: </h2>
+<ul>
+  <th:block th:each="order : ${orders}">
+    <div th:each="item : ${order.items}">
+      <div th:each="itm : ${items}" th:if="${item.id == itm.id}">
+        <ul>
+          <li>
+            <p th:text="'Название товара: ' + ${itm.name} + ' Цена товара:  '+ ${itm.price}"/>
+          </li>
+
+          </li>
+        </ul>
+
+      </div>
+    </div>
+    <li>
+      <span th:text="'Дата: ' + ${order.date} + ' Цена:' + ${order.totalPrice}"></span>
+      <ul>
+        <li th:each="item : ${order.items}" th:text="'Имя товара: ' + ${item.name}"></li>
+      </ul>
+    </li>
+    <form action="/orders/update" method="post" style="display:inline;">
+      <input type="hidden" name="id" th:value="${order.id}">
+      <input type="date" name="date" th:value="${order.date}" required>
+      <input type="number" step="0.01" name="totalPrice" th:value="${order.totalPrice}" required>
+      <div>
+        <label for="updItems">Товары: </label>
+        <select id="updItems" multiple name="order.items">
+          <option th:each="item : ${items}"
+                  th:value="${item.id}"
+                  th:text="${item.name}"
+                  th:selected="${#lists.contains(order.items, item)}"></option>
+        </select>
+      </div>
+
+      <button type="submit" formmethod="post">Обновить заказ</button>
+    </form>
+    <form action="/orders/delete" method="post" style="display:inline;">
+      <input type="hidden" name="id" th:value="${order.id}">
+      <button type="submit" formmethod="post">Удалить</button>
+    </form>
+    <hr style="border:none; height:2px; background-color:black;">
+  </th:block>
+</ul>
+</body>
+</html>

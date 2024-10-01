@@ -9,40 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class InMemoryPassportServiceImpl implements PassportService {
+public class InMemoryPassportServiceImpl extends InMemoryAbstractService<PassportModel, UUID, PassportRepository> {
     private final PassportRepository passportRepository;
 
-    public InMemoryPassportServiceImpl(PassportRepository passportRepository) {
+
+    public InMemoryPassportServiceImpl(PassportRepository jpaRepository, PassportRepository passportRepository) {
+        super(jpaRepository);
         this.passportRepository = passportRepository;
-    }
-
-    @Override
-    public List<PassportModel> findAllPassports(){
-        return passportRepository.findAll(Sort.by("id"));
-    }
-
-    @Override
-    public PassportModel findPassportById(UUID id){
-        return passportRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public PassportModel addPassport(PassportModel passport){
-        return passportRepository.save(passport);
-    }
-
-    @Override
-    public PassportModel updatePassport(PassportModel passport){
-        if(passportRepository.existsById(passport.getId())){
-            return passportRepository.save(passport);
-        }
-        return null;
-    }
-
-    @Override
-    public void deletePassport(UUID id){
-        if(passportRepository.existsById(id)){
-            passportRepository.deleteById(id);
-        }
     }
 }

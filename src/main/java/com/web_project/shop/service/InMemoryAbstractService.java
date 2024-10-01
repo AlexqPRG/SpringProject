@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public abstract class InMemoryAbstractService<T, Long, R extends JpaRepository<T, Long>> implements AbstractService<T, Long>{
-    private final JpaRepository<T, Long> jpaRepository;
+public abstract class InMemoryAbstractService<T, UUID, R extends JpaRepository<T, UUID>> implements AbstractService<T, UUID>{
+    private final JpaRepository<T, UUID> jpaRepository;
 
     public InMemoryAbstractService(R jpaRepository) {
         this.jpaRepository = jpaRepository;
@@ -23,12 +23,12 @@ public abstract class InMemoryAbstractService<T, Long, R extends JpaRepository<T
     }
 
     @Override
-    public T findById(Long id){
+    public T findById(UUID id){
         return jpaRepository.findById(id).orElse(null);
     }
 
     @Override
-    public T updateNote(T model, Long id){
+    public T updateNote(T model, UUID id){
         if(jpaRepository.existsById(id)){
             return jpaRepository.save(model);
         }
@@ -36,7 +36,7 @@ public abstract class InMemoryAbstractService<T, Long, R extends JpaRepository<T
     }
 
     @Override
-    public void deleteNote(Long id){
+    public void deleteNote(UUID id){
         if(jpaRepository.existsById(id)){
             jpaRepository.deleteById(id);
         }
