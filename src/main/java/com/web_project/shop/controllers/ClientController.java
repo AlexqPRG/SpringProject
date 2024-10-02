@@ -2,8 +2,11 @@ package com.web_project.shop.controllers;
 
 import com.web_project.shop.model.AddressModel;
 import com.web_project.shop.model.ClientModel;
+import com.web_project.shop.model.ItemModel;
+import com.web_project.shop.model.OrderModel;
 import com.web_project.shop.service.InMemoryAddressService;
 import com.web_project.shop.service.InMemoryClientServiceImpl;
+import com.web_project.shop.service.InMemoryOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,6 +30,9 @@ public class ClientController {
     @Autowired
     public InMemoryAddressService addressService;
 
+    @Autowired
+    public InMemoryOrderService orderService;
+
     @GetMapping("/all")
     public String findAllClients(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "5") int size,
@@ -35,6 +41,7 @@ public class ClientController {
         model.addAttribute("page", page);
         model.addAttribute("count", clientService.getSizePaginClients());
         model.addAttribute("client", new ClientModel());
+        model.addAttribute("orders", orderService.findAll());
         return "clientsList";
     }
 
@@ -55,13 +62,6 @@ public class ClientController {
 
     @PostMapping("/add")
     public String createClient(@Valid @ModelAttribute("client") ClientModel clientModel, BindingResult result, Model model) {
-
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        clientModel.setDateCreate(currentDate.format(formatter));
-
-
-
         if(result.hasErrors()){
             model.addAttribute("clients", clientService.paginClients(0, 0));
             model.addAttribute("page", 0);
@@ -73,7 +73,8 @@ public class ClientController {
     }
 
     @PostMapping("/update")
-    public String updateCreate(@Valid @ModelAttribute("client") ClientModel clientModel, BindingResult result) {
+    public String updateCreate(@Valid @ModelAttribute("client") ClientModel clientModel, @RequestParam("client.order") List<OrderModel> orderList, BindingResult result) {
+        clientModel.setOrder(orderList);
         clientService.updateClient(clientModel, clientModel.getId());
         return "redirect:/clients/all";
     }

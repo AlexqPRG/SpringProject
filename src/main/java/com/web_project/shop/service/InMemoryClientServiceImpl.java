@@ -1,7 +1,6 @@
 package com.web_project.shop.service;
 
 import com.web_project.shop.model.ClientModel;
-import com.web_project.shop.model.OrderModel;
 import com.web_project.shop.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,21 +17,13 @@ public class InMemoryClientServiceImpl extends InMemoryAbstractService<ClientMod
 
     private final ClientRepository clientRepository;
 
+
     public InMemoryClientServiceImpl(ClientRepository clientRepository) {
         super(clientRepository);
         this.clientRepository = clientRepository;
     }
 
     public ClientModel updateClient(ClientModel model, UUID id) {
-
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date = LocalDate.parse(model.getDateCreate(), inputFormatter);
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String formattedData = date.format(outputFormatter);
-
-        model.setDateCreate(formattedData);
-
-
         if(clientRepository.existsById(model.getId())){
             return clientRepository.save(model);
         }

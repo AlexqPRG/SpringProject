@@ -9,6 +9,7 @@
 <form action="/orders/add" method="post" th:object="${order}">
   <input type="date" name="date" placeholder="Дата" th:field="*{date}" required>
   <input type="number" step="0.01" name="totalPrice" placeholder="Общая цена" th:field="*{totalPrice}" required>
+  <input type="text" name="client.id" placeholder="ID клиента" th:field="*{client.id}" required>
   <div>
     <label for="items">Товары: </label>
     <select id="items" multiple th:field="*{items}">
@@ -43,6 +44,7 @@
       <input type="hidden" name="id" th:value="${order.id}">
       <input type="date" name="date" th:value="${order.date}" required>
       <input type="number" step="0.01" name="totalPrice" th:value="${order.totalPrice}" required>
+      <input type="text" name="client.id" placeholder="ID клиента" th:value="${order.client.id}" required>
       <div>
         <label for="updItems">Товары: </label>
         <select id="updItems" multiple name="order.items">

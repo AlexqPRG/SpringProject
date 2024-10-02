@@ -3,6 +3,7 @@ package com.web_project.shop.controllers;
 import com.web_project.shop.model.ItemModel;
 import com.web_project.shop.model.PassportModel;
 import com.web_project.shop.model.OrderModel;
+import com.web_project.shop.service.InMemoryClientServiceImpl;
 import com.web_project.shop.service.InMemoryItemService;
 import com.web_project.shop.service.InMemoryOrderService;
 import jakarta.validation.Valid;
@@ -30,15 +31,15 @@ public class OrderController {
     public String getAllOrders(Model model) {
         model.addAttribute("orders", orderService.findAll());
         model.addAttribute("order", new OrderModel());
-        model.addAttribute("items",itemService.findAll());
+        model.addAttribute("items", itemService.findAll());
         return "orderList";
     }
 
     @PostMapping("/add")
     public String addOrder(@Valid @ModelAttribute("order") OrderModel order, BindingResult result, Model model) {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             model.addAttribute("orders", orderService.findAll());
-            model.addAttribute("items",itemService.findAll());
+            model.addAttribute("items", itemService.findAll());
             return "orderList";
         }
         orderService.createNote(order);
@@ -55,17 +56,16 @@ public class OrderController {
     }
 
     @PostMapping("/delete")
-    public String deleteOrder(@RequestParam UUID id){
+    public String deleteOrder(@RequestParam UUID id) {
         orderService.deleteNote(id);
         return "redirect:/orders/all";
     }
 
     @GetMapping("/all/{id}")
-    public String getIdOrder(@PathVariable("id") UUID id, Model model){
+    public String getIdOrder(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("orders", orderService.findById(id));
         model.addAttribute("order", new OrderModel());
-        model.addAttribute("items",itemService.findAll());
+        model.addAttribute("items", itemService.findAll());
         return "orderList";
     }
-
 }

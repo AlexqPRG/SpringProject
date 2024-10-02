@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Список адресов:</h1>
-<form action="/address/add" method="post" th:object="${address}">
+<form action="/addresses/add" method="post" th:object="${address}">
     <input type="text" name="country" placeholder="Страна" th:field="*{country}" required>
 
     <input type="text" name="city" placeholder="Город" th:field="*{city}" required>
@@ -24,7 +24,7 @@
     <th:block th:each="adres : ${addresses}">
         <li>
             <span th:text="${adres.country} + ' ' + ${adres.city} + ' ' + ${adres.street} + ' ' + ${adres.floor} + ' ' + ${adres.numberHouse}"></span>
-            <form action="/address/update" method="post" style="display:inline;">
+            <form action="/addresses/update" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${adres.id}">
                 <input type="text" name="country" th:value="${adres.country}" placeholder="Страна" required>
                 <input type="text" name="city" th:value="${adres.city}" placeholder="Город" required>
@@ -33,11 +33,12 @@
                 <input type="text" name="numberHouse" th:value="${adres.numberHouse}" placeholder="Номер дома">
                 <button type="submit" formmethod="post">Обновить</button>
             </form>
-            <form action="/address/delete" method="post" style="display:inline;">
+            <form action="/addresses/delete" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${adres.id}">
                 <button type="submit" formmethod="post">Удалить</button>
             </form>
         </li>
+        <p th:text="'Имя клиента: ' + ${adres.client.name}"/>
     </th:block>
 </ul>
 </body>
