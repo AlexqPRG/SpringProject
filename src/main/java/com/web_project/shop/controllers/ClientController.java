@@ -73,7 +73,7 @@ public class ClientController {
     }
 
     @PostMapping("/update")
-    public String updateCreate(@Valid @ModelAttribute("client") ClientModel clientModel, @RequestParam("client.order") List<OrderModel> orderList, BindingResult result) {
+    public String updateCreate(@Valid @ModelAttribute("client") ClientModel clientModel, @RequestParam(value = "client.order", required = false) List<OrderModel> orderList, BindingResult result) {
         clientModel.setOrder(orderList);
         clientService.updateClient(clientModel, clientModel.getId());
         return "redirect:/clients/all";
