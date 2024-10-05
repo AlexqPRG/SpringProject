@@ -17,3 +17,6 @@ spring:
         format_sql:
 server:
   port: 7654
+  servlet:
+    session:
+      timeout: 5s

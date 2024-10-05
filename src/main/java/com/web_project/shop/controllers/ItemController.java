@@ -4,6 +4,7 @@ import com.web_project.shop.model.ItemModel;
 import com.web_project.shop.service.InMemoryItemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +19,7 @@ public class ItemController {
     @Autowired
     public InMemoryItemService itemServiceTEst;
 
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER', 'USER')")
     @GetMapping("/all")
     public String getAllItems(Model model){
         model.addAttribute("items", itemServiceTEst.findAll());
@@ -36,6 +37,7 @@ public class ItemController {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER', 'USER')")
     @GetMapping("/all/{id}")
     public String getItemById(@PathVariable("id") UUID id, Model model){
         model.addAttribute("items", itemServiceTEst.findById(id));
@@ -43,6 +45,7 @@ public class ItemController {
         return "itemList";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @PostMapping("/add")
     public String addItem(@Valid @ModelAttribute("item") ItemModel itemModel, BindingResult result, Model model){
         if(result.hasErrors()){
@@ -53,12 +56,14 @@ public class ItemController {
         return "redirect:/items/all";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @PostMapping("/update")
     public String updateItem(@Valid @ModelAttribute("item") ItemModel itemModel, BindingResult result){
         itemServiceTEst.updateNote(itemModel, itemModel.getId());
         return "redirect:/items/all";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @PostMapping("/delete")
     public String deleteItem(@RequestParam UUID id){
         itemServiceTEst.deleteNote(id);

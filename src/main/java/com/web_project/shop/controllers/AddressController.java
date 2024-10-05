@@ -8,6 +8,7 @@ import com.web_project.shop.service.InMemoryItemService;
 import com.web_project.shop.service.InMemoryOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,7 @@ public class AddressController {
 
 
 
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @GetMapping("/all")
     public String getAllAddresses(Model model) {
         model.addAttribute("addresses", addressService.findAll());
@@ -50,6 +51,7 @@ public class AddressController {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/delete")
     public String deleteAddress(@RequestParam UUID id){
         addressService.deleteNote(id);

@@ -30,6 +30,11 @@ public class RegistrationController {
         if(userRepository.existsByUsername(user.getUsername())){
             model.addAttribute("message", "Пользователь уже существует");
             return "regis";
+
+        }
+        if(!user.getPassword().matches(".*[!@#$%^&*(),.?\":{}|<>].*") || user.getPassword().length() <= 7){
+            model.addAttribute("password_message","Пароль должен содержать хотя бы 1 спец символ и иметь длину не менее 7 символов");
+            return "regis";
         }
         user.setActive(true);
         user.setRoles(Collections.singleton(RoleEnum.USER));

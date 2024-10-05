@@ -1,6 +1,8 @@
 package com.web_project.shop.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 import java.util.UUID;

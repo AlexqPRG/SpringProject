@@ -8,6 +8,7 @@ import com.web_project.shop.service.InMemoryItemService;
 import com.web_project.shop.service.InMemoryOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +27,7 @@ public class OrderController {
     public InMemoryItemService itemService;
 
 
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @GetMapping("/all")
     public String getAllOrders(Model model) {
         model.addAttribute("orders", orderService.findAll());
@@ -35,6 +36,7 @@ public class OrderController {
         return "orderList";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/add")
     public String addOrder(@Valid @ModelAttribute("order") OrderModel order, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -47,6 +49,7 @@ public class OrderController {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/update")
     public String updateOrder(@Valid @ModelAttribute("order") OrderModel order, @RequestParam("order.items") List<ItemModel> itemList, BindingResult result) {
         order.setItems(itemList);
@@ -55,12 +58,14 @@ public class OrderController {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/delete")
     public String deleteOrder(@RequestParam UUID id) {
         orderService.deleteNote(id);
         return "redirect:/orders/all";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER', 'USER')")
     @GetMapping("/all/{id}")
     public String getIdOrder(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("orders", orderService.findById(id));

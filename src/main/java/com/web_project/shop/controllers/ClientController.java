@@ -10,6 +10,7 @@ import com.web_project.shop.service.InMemoryOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,8 @@ public class ClientController {
     @Autowired
     public InMemoryOrderService orderService;
 
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @GetMapping("/all")
     public String findAllClients(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "5") int size,
@@ -51,6 +54,7 @@ public class ClientController {
         addressService.createNote(addressModel);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @GetMapping("/all/{id}")
     public String findClientById(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("clients", clientService.findById(id));
@@ -60,6 +64,7 @@ public class ClientController {
         return "clientsList";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'MANAGER')")
     @PostMapping("/add")
     public String createClient(@Valid @ModelAttribute("client") ClientModel clientModel, BindingResult result, Model model) {
         if(result.hasErrors()){
@@ -72,6 +77,7 @@ public class ClientController {
         return "redirect:/clients/all";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/update")
     public String updateCreate(@Valid @ModelAttribute("client") ClientModel clientModel, @RequestParam(value = "client.order", required = false) List<OrderModel> orderList, BindingResult result) {
         clientModel.setOrder(orderList);
@@ -79,6 +85,7 @@ public class ClientController {
         return "redirect:/clients/all";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/delete")
     public String deleteClient(@RequestParam UUID id){
         clientService.deleteNote(id);
